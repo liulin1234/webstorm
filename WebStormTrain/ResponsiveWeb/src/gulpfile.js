@@ -9,8 +9,8 @@ var useref = require("gulp-useref");
 var filter = require("gulp-filter");
 var csso = require("gulp-csso");
 
-gulp.task('defalut',fuction(){
-
-})
+// gulp.task('defalut',fuction(){
+//
+// })
 
 
