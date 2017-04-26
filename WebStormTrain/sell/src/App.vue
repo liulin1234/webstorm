@@ -1,10 +1,12 @@
 <template>
   <div id="app">
-    <div class="header">
-      i am a header
-    </div>
+
+    <v-header></v-header>
+
     <div class="tab">
-      i am a tab
+      <div class="tab-item">商品</div>
+      <div class="tab-item">评价</div>
+      <div class="tab-item">商家</div>
     </div>
     <div class="content">
       i am a content
@@ -13,9 +15,22 @@
 </template>
 
 <script>
-
+  import header from './components/header/header.vue';
+  export default {
+    components: {
+      'v-header': header
+    }
+  };
 </script>
 
-<style>
-
+<style lang="stylus" rel="stylesheet/stylus" >
+  #app
+    .tab
+      display:flex
+      width:100%
+      height:40px
+      line-height:40px
+      .tab-item
+        flex:1
+        text-algin:center
 </style>
