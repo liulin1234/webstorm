@@ -11,7 +11,7 @@ import seller from 'components/seller/seller';
 import 'common/stylus/index.styl';
 
 Vue.use(VueRouter);
-Vue.use(VueResource);// 全局注册 use()
+Vue.use(VueResource);// 全局注册 use():安装插件
 
 Vue.config.productionTip = false;
 
