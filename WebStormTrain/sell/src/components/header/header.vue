@@ -2,7 +2,7 @@
   <div class="header">
     <div class="content-wrapper">
       <div class="avatar">
-        <img :src="imgUrl" width="64" height="64">
+        <img :src="seller.avatar" width="64" height="64">
       </div>
       <div class="content">
         <div class="title">
@@ -13,18 +13,31 @@
           {{ seller.description }}/{{ seller.deliveryTime }}分钟送达
         </div>
         <div v-if="seller.supports" class="support">
-          <span class="icon" :class="classMap[0]"></span>
+          <span class="icon" :class="classMap[seller.supports[0].type]"></span>
           <span class="text">{{ seller.supports[0].description }}</span>
         </div>
       </div>
       <div v-if="seller.supports" class="support-count">
-        <span class="count">{{ seller.supports.length }}个</span>
+        <span class="count" @click="showDetail">{{ seller.supports.length }}个</span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="showDetail">
       <span class="bulletin-title"></span><span class="bulletin-text">{{ seller.bulletin }}</span>
       <i class="icon-keyboard_arrow_right"></i>
+    </div>
+    <div class="background">
+      <img :src="seller.avatar" alt="背景图片" width="100%" height="100%">
+    </div>
+    <div v-show="detailShow" class="detail">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-main">
+          <h1 class="name">{{ seller.name }}</h1>
+        </div>
+      </div>
+      <div class="detail-close">
+        <i class="icon-close"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -40,8 +53,14 @@
 //    data为当前对象的属性
     data() {
       return {
-        imgUrl: 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
+        imgUrl: 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg',
+        detailShow: false
       };
+    },
+    methods: {
+        showDetail() {
+            this.detailShow = true;
+        }
     },
     created() {
         this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
@@ -53,8 +72,10 @@
   @import '../../common/stylus/mixin.styl';
 
   .header
+    position: relative
+    overflow: hidden
     color: #fff
-    background: #999
+    background: rgba(7,17,27,0.5)
     .content-wrapper
       position: relative
       padding: 24px 12px 18px 24px
@@ -151,7 +172,42 @@
         font-size: 10px
         right: 12px
         top: 10px
-
+    .background
+      position: absolute
+      top: 0
+      left: 0
+      z-index: -1
+      width: 100%
+      height: 100%
+      filter: blur(10px)
+    .detail
+      position: fixed
+      z-index: 100
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      overflow: auto
+      background: rgba(7,17,27,0.8)
+      /*filter:blur(10px)*/
+      .detail-wrapper
+        min-height: 100%
+        width: 100%
+        .detail-main
+          margin-top: 64px
+          padding-bottom: 64px
+          .name
+            line-height: 16px
+            text-align: center
+            font-size: 16px
+            font-weight: 700
+      .detail-close
+        position: relative
+        width: 32px
+        height: 32px
+        margin: -64px auto 0 auto
+        clear: both
+        font-size: 32px
 
 
 
