@@ -75,7 +75,7 @@
         type: Object
       }
     },
-//    data为当前对象的属性
+//    data为当前对象的属性  Vue 将会递归将 data 的属性转换为 getter/setter，从而让 data 的属性能够响应数据变化
     data() {
       return {
         imgUrl: 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg',
