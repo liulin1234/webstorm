@@ -2,7 +2,8 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li v-for="item in goods" class="menu-item">
+        <li v-for="(item,index) in goods" class="menu-item"
+            :class="{'current':currentIndex === index}" @click="selectMenu(index,$event)">
           <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{ item.name }}
           </span>
@@ -11,7 +12,7 @@
     </div>
     <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
-        <li v-for="item in goods" class="food-list">
+        <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{ item.name }}</h1>
           <ul>
             <li v-for="food in item.foods" class="food-item">
@@ -35,11 +36,13 @@
         </li>
       </ul>
     </div>
+    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';// 区域进行滚动
+  import shopcart from 'components/shopcart/shopcart';
 
   const ERR_OK = 0;
 
@@ -52,8 +55,23 @@
     },
     data() {
         return {
-          goods: []
+          goods: [],
+          listHeight: [],
+          scrollY: []
         };
+    },
+    // computed:计算属性
+    computed: {
+      currentIndex() {
+          for (let i = 0; i < this.listHeight.length; i++) {
+              let height1 = this.listHeight[i];
+              let height2 = this.listHeight[i + 1];
+              if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+                  return i;
+              }
+          }
+          return 0;
+      }
     },
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
@@ -63,17 +81,51 @@
           if (response.errno === ERR_OK) {
               this.goods = response.data;
               this.$nextTick(() => {
+                  // nextTick:DOM渲染之后，对DOM进行操作
                 this._initScroll();
+                this._calculateHeight();
               });
           }
       });
     },
     methods: {
-        _initScroll() {
-          this.meunScroll = new BScroll(this.$refs.menuWrapper, {});
+      selectMenu(index, event) {
+          if (!event._constructed) {
+              // 只有浏览器才具有的属性 _constructed
+              return;
+          }
+          let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
+          let el = foodList[index];
+          this.foodsScroll.scrollToElement(el, 300);
+          console.log(index);
+      },
 
-          this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {});
+        _initScroll() {
+          this.meunScroll = new BScroll(this.$refs.menuWrapper, {
+              click: true
+          });
+
+          this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
+              probeType: 3
+          });
+
+          this.foodsScroll.on('scroll', (pos) => {
+              this.scrollY = Math.abs(Math.round(pos.y));// abs:绝对值，round:四舍五入
+          });
+      },
+      _calculateHeight() {
+          let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
+          let height = 0;
+          this.listHeight.push(height);
+          for (let i = 0; i < foodList.length; i++) {
+              let item = foodList[i];
+              height += item.clientHeight;
+              this.listHeight.push(height);
+          }
       }
+    },
+    components: {
+        shopcart
     }
   };
 </script>
@@ -99,6 +151,14 @@
         width: 56px
         line-height: 14px
         padding: 0 12px
+        &.current
+          position: relative
+          z-index: 10
+          background: #fff
+          font-weight: 700
+          margin-top: -1px
+          .text
+            border-none()
         .icon
           display: inline-block
           vertical-align: top
