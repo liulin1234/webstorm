@@ -11,9 +11,9 @@
         <div class="price">￥{{ totalPrice }}</div>
         <div class="desc">另需配送费￥{{ deliveryPrice }}元</div>
       </div>
-      <div class="content-right">
+      <div class="content-right" :class="payClass">
         <div class="pay">
-          ￥{{ minPrice }}元起送
+          {{ payDesc }}
         </div>
       </div>
     </div>
@@ -28,8 +28,8 @@
             default() {
                 return [
                   {
-                      price: 10,
-                      count: 1.5
+                      price: 30,
+                      count: 2
                   }
                 ];
             }
@@ -57,6 +57,23 @@
                 count += food.count;
             });
             return count;
+        },
+        payDesc() {
+            if (this.totalPrice === 0) {
+                return `￥${this.minPrice}元起送`;
+            } else if (this.totalPrice < this.minPrice) {
+                let diff = this.minPrice - this.totalPrice;
+                return `还差￥${diff}元起送`;
+            } else {
+                return `去结算`;
+            }
+        },
+        payClass() {
+            if (this.totalPrice < this.minPrice) {
+                return 'not-enough';
+            } else {
+                return 'enough';
+            }
         }
       }
   };
@@ -100,6 +117,19 @@
               line-height: 44px
               font-size: 24px
               color: #80858a
+          .num
+            position: relative
+            top: -57px
+            left: 30px
+            background: red
+            color: white
+            font-size: 10px
+            width: 20px
+            height: 15px
+            line-height: 15px
+            text-align: center
+            border-radius: 8px
+            z-index: 50
         .price
           display: inline-block
           vertical-align: top
@@ -128,5 +158,11 @@
         text-align: center
         font-size: 12px
         font-weight: 700
+      &.not-enough
+        background: #2b343c;
+      &.enough
+        background: green;
+        color: #fff
+
 
 </style>
