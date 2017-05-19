@@ -3,12 +3,12 @@
     <div class="content">
       <div class="content-left">
         <div class="logo-wrapper">
-          <div class="logo">
-            <span class="icon-shopping_cart"></span>
+          <div class="logo" :class="{'highLight': totalCount > 0}">
+            <span class="icon-shopping_cart" :class="{'highLight': totalCount > 0}"></span>
           </div>
-          <div class="num">{{ totalCount }}</div>
+          <div class="num" ref="number" v-show="totalCount > 0">{{ totalCount }}</div>
         </div>
-        <div class="price">￥{{ totalPrice }}</div>
+        <div class="price" :class="{'highLight': totalPrice > 0}">￥{{ totalPrice }}</div>
         <div class="desc">另需配送费￥{{ deliveryPrice }}元</div>
       </div>
       <div class="content-right" :class="payClass">
@@ -29,7 +29,7 @@
                 return [
                   {
                       price: 30,
-                      count: 2
+                      count: 0
                   }
                 ];
             }
@@ -52,11 +52,17 @@
             return total;
         },
         totalCount() {
+//            debugger;
             let count = 0;
+//            let numDom = this.$refs.number;
             this.selectFoods.forEach((food) => {
                 count += food.count;
             });
-            return count;
+            if (count === 0) {
+                return;
+            } else {
+              return count;
+            }
         },
         payDesc() {
             if (this.totalPrice === 0) {
@@ -113,23 +119,29 @@
             border-radius: 50%
             text-align: center
             background: #2b343c
+            &.highLight
+              background: rgb(0,160,220)
             .icon-shopping_cart
               line-height: 44px
               font-size: 24px
               color: #80858a
+              &.highLight
+                color: #fff
           .num
             position: relative
-            top: -57px
-            left: 30px
+            top: -48px
+            left: 27px
             background: red
-            color: white
+            color: #fff
             font-size: 10px
             width: 20px
             height: 15px
             line-height: 15px
+            font-weight: 700
             text-align: center
             border-radius: 8px
             z-index: 50
+            box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.4)
         .price
           display: inline-block
           vertical-align: top
@@ -141,6 +153,8 @@
           font-size: 16px
           font-weight: 700
           color: rgba(255,255,255,0.4)
+          &.highLight
+            color: #fff
         .desc
           display: inline-block
           vertical-align: top

@@ -39,7 +39,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart :selectFoods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
@@ -75,6 +75,18 @@
               }
           }
           return 0;
+      },
+      selectFoods() {
+          let foods = [];
+          this.goods.forEach((good) => {
+              good.foods.forEach((food) => {
+                  if (food.count) {
+                      // 观测到每一个food的变化，进行联动
+                      foods.push(food);
+                  }
+              });
+          });
+          return foods;
       }
     },
     created() {
