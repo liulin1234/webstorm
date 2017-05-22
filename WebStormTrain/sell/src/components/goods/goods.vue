@@ -15,7 +15,7 @@
         <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{ item.name }}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item">
+            <li @click="selectFood(food,$event)" v-for="food in item.foods" class="food-item">
               <div class="icon">
                 <img :src="food.icon" alt="图片无法显示" width="57" height="57">
               </div>
@@ -40,6 +40,7 @@
       </ul>
     </div>
     <shopcart :selectFoods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <food :food="selectedFood" ref="food"></food>
   </div>
 </template>
 
@@ -47,6 +48,7 @@
   import BScroll from 'better-scroll';// 区域进行滚动
   import shopcart from 'components/shopcart/shopcart';
   import cartcontrol from 'components/cartcontrol/cartcontrol';
+  import food from 'components/food/food';
 
   const ERR_OK = 0;
 
@@ -61,7 +63,8 @@
         return {
           goods: [],
           listHeight: [],
-          scrollY: []
+          scrollY: [],
+          selectedFood: {}
         };
     },
     // computed:计算属性
@@ -115,6 +118,14 @@
           this.foodsScroll.scrollToElement(el, 300);
           console.log(index);
       },
+      selectFood(food, event) {
+//          debugger;
+        if (!event._constructed) {
+            return;
+        }
+        this.selectedFood = food;
+        this.$refs.food.show();
+      },
 
         _initScroll() {
           this.meunScroll = new BScroll(this.$refs.menuWrapper, {
@@ -143,7 +154,8 @@
     },
     components: {
         shopcart,
-        cartcontrol
+        cartcontrol,
+        food
     }
   };
 </script>
