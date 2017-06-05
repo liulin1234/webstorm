@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>闭包</title>
+    <script>
+        var a = 20;
+        function test(){
+            var b = a + 10;
+            function innerTest(){
+                var c = 10;
+                function innerTest_2(){
+                    console.log(b+c);
+                }
+                return innerTest_2();
+            }
+            return innerTest();
+        }
+        test();
+
+        var fn = null;
+        function foo(){
+            var a = 2;
+            function innerFoo(){
+                console.log(a);
+            }
+            fn = innerFoo;
+        }
+        function bar(){
+            fn();
+        }
+        foo();
+        bar();
+
+        for (var i =1;i<=5;i++){
+
+           /* (function(i){
+                setTimeout(function timer(){
+                    console.log(i);
+                },i*1000)
+            })(i);*/
+
+//            setTimeout((function(i){
+//                return function aaa(){
+//                    console.log(i)
+//                };
+//
+//            })(i),i*1000)
+
+//            setTimeout(function(i){
+//                return (function(){
+//                    console.log(i)
+//                })()
+//            },1000,i)
+
+//            setTimeout(function(i){
+//                console.log(i);
+//            },1000,i)
+
+            for (var i=1; i<=5; i++) {
+                setTimeout( function timer(i) {
+                    console.log(i);
+                }.bind(console,i), i*1000 );
+            }
+
+
+        }
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
