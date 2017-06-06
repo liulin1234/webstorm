@@ -4,35 +4,35 @@
     <meta charset="UTF-8">
     <title>闭包</title>
     <script>
-        var a = 20;
-        function test(){
-            var b = a + 10;
-            function innerTest(){
-                var c = 10;
-                function innerTest_2(){
-                    console.log(b+c);
-                }
-                return innerTest_2();
-            }
-            return innerTest();
-        }
-        test();
-
-        var fn = null;
-        function foo(){
-            var a = 2;
-            function innerFoo(){
-                console.log(a);
-            }
-            fn = innerFoo;
-        }
-        function bar(){
-            fn();
-        }
-        foo();
-        bar();
-
-        for (var i =1;i<=5;i++){
+//        var a = 20;
+//        function test(){
+//            var b = a + 10;
+//            function innerTest(){
+//                var c = 10;
+//                function innerTest_2(){
+//                    console.log(b+c);
+//                }
+//                return innerTest_2();
+//            }
+//            return innerTest();
+//        }
+//        test();
+//
+//        var fn = null;
+//        function foo(){
+//            var a = 2;
+//            function innerFoo(){
+//                console.log(a);
+//            }
+//            fn = innerFoo;
+//        }
+//        function bar(){
+//            fn();
+//        }
+//        foo();
+//        bar();
+//
+//        for (var i =1;i<=5;i++){
 
            /* (function(i){
                 setTimeout(function timer(){
@@ -57,14 +57,37 @@
 //                console.log(i);
 //            },1000,i)
 
-            for (var i=1; i<=5; i++) {
-                setTimeout( function timer(i) {
-                    console.log(i);
-                }.bind(console,i), i*1000 );
-            }
+//            for (var i=1; i<=5; i++) {
+//                setTimeout( function timer(i) {
+//                    console.log(i);
+//                }.bind(console,i), i*1000 );
+//            }
+//
+//
+//        }
+
+(function() {
+    // 私有变量
+    var age = 20;
+    var name = 'Tom';
 
 
-        }
+    // 私有方法
+    function getName() {
+        return `your name is ` + name;
+    }
+
+
+    // 共有方法
+    function getAge() {
+        return 1;
+    }
+
+    // 将引用保存在外部执行环境的变量中，形成闭包，防止该执行环境被垃圾回收
+    window.getAge = getAge;
+})();
+
+window.getAge();
 
     </script>
 </head>
